@@ -1,18 +1,6 @@
-// import usersArr from './users.mjs';
 require( 'dotenv' ).config( {path: './.env'} );
 const TelegramBotApi = require( 'node-telegram-bot-api' );
 const bot = new TelegramBotApi( process.env.TOKEN, {polling: true} );
-
-// const mysql = require('mysql2')
-
-// const connection = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   database: 'usersdb',
-//   password: 'parol2002',
-// })
-
-
 
 let usersAll = [1042168079]
 bot.setMyCommands([
@@ -98,42 +86,36 @@ const srchInCity = async (chatId) => {
 
 const start = () => {
   bot.on( 'message', async msg => {
-    
     const msgText = msg.text;
     const chatId = msg.chat.id;
     const userName = msg.from.first_name;
     const userId = msg.from.id;
-    const msgId = msg.message_id;
-    const isAdmin = Number( process.env.ADMINID ) === userId;
-
+    // const msgId = msg.message_id;
+    // const isAdmin = Number( process.env.ADMINID ) === userId;
     const userInArray = (user) => {
       return user === userId
     }
-
     switch(true) {
-
+      
       case msgText === '/start':
         if(usersAll.length > 0) {
           const findUser = usersAll.find(userInArray)
           if(findUser === undefined) {
             usersAll.push(userId)
-            console.log(usersAll)
           } else {
-            console.log('уже есть')
-            console.log(usersAll)
+            console.log('have')
           }
-          console.log(usersAll)
         }
         console.log(userId, userName)
         return bot.sendMessage(chatId, `Привет, ${userName}.`, {
-        reply_markup: {
-          keyboard: [
-            ['⭐️ Шоубиз/Slivki ⭐️', '🌇 Твой город/GayGirl 🌇'],
-            ['🕵🏽‍♂️ Запрос/YourFriends 🕵🏽‍♂️'],
-            ['❌ Закрыть меню ❌'],
-          ], resize_keyboard: true
-        }
-       });
+          reply_markup: {
+            keyboard: [
+              ['⭐️ Шоубиз/Slivki ⭐️', '🌇 Твой город/GayGirl 🌇'],
+              ['🕵🏽‍♂️ Запрос/YourFriends 🕵🏽‍♂️'],
+              ['❌ Закрыть меню ❌'],
+            ], resize_keyboard: true
+          }
+        });
 
       case msgText === '/help':
         return bot.sendMessage(chatId, `${userName}, ниже представлены правила пользования.`, {
@@ -268,8 +250,6 @@ const start = () => {
         }
         break
     
-      // case msgText.includes('Name:'):
-      //   checkSrch(chatId)
     };
   });
 
